@@ -1,4 +1,11 @@
 // Package csnappy are cgo bindings for the snappy compression library.
+/*
+This package exposes the same interface as `code.google.com/p/snappy-go`, so
+using it in your code should be as easy as changing the import line
+appropriately.  Note that this packages name is `csnappy`, so you'll need to
+import it with the `snappy` identifier if you want true drop-in compatibility.
+
+*/
 package csnappy
 
 /*
