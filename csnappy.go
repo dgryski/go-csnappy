@@ -46,10 +46,10 @@ var (
 
 // Encode compresses the byte array src [and returns the compressed data.  The
 // returned array may be a subslice of dst if it was large enough.
-func Encode(dst, src []byte) ([]byte, error) {
+func Encode(dst, src []byte) []byte {
 
 	if src == nil {
-		return nil, nil
+		return nil
 	}
 
 	dLen := C.snappy_max_compressed_length(C.size_t(len(src)))
@@ -58,15 +58,10 @@ func Encode(dst, src []byte) ([]byte, error) {
 		dst = make([]byte, dLen)
 	}
 
-	err := C.snappy_compress((*C.char)(unsafe.Pointer(&src[0])), C.size_t(len(src)),
+	C.snappy_compress((*C.char)(unsafe.Pointer(&src[0])), C.size_t(len(src)),
 		(*C.char)(unsafe.Pointer(&dst[0])), (*C.size_t)(unsafe.Pointer(&dLen)))
 
-	// compression failed :(
-	if err != C.SNAPPY_OK {
-		return nil, Errno(err)
-	}
-
-	return dst[:dLen], nil
+	return dst[:dLen]
 }
 
 // Decode uncompresses the byte array src and returns the uncompressed data.
